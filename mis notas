@@ -1,0 +1,362 @@
+# Sistema ADECINE - Gestión de Bienes Institucionales y Personal
+
+Sistema completo de gestión de bienes institucionales con identificación digital para la Autoridad de Fiscalización y Control de Cinematografía y Eventos Públicos (ADECINE) - Bolivia.
+
+## 📋 Requisitos Previos
+
+Antes de comenzar, asegúrate de tener instalado:
+
+- **Node.js** v16 o superior ([Descargar aquí](https://nodejs.org/))
+- **Python** 3.11 o superior ([Descargar aquí](https://www.python.org/downloads/))
+- **Git** ([Descargar aquí](https://git-scm.com/downloads))
+- **Visual Studio Code** ([Descargar aquí](https://code.visualstudio.com/))
+
+### Verificar instalaciones
+
+Abre una terminal y ejecuta:
+
+```bash
+node --version    # Debe mostrar v16 o superior
+python --version  # Debe mostrar 3.11 o superior
+npm --version     # Debe mostrar 8 o superior
+git --version     # Debe mostrar 2.x o superior
+```
+
+---
+
+## 🚀 Instalación y Configuración
+
+### Paso 1: Descargar el Proyecto
+
+Tienes dos opciones:
+
+#### Opción A: Descargar como ZIP (Más fácil)
+1. En la plataforma Emergent, busca la opción de **descargar proyecto**
+2. Extrae el archivo ZIP en tu computadora
+3. Abre la carpeta extraída en Visual Studio Code
+
+#### Opción B: Clonar repositorio (Si está en Git)
+```bash
+git clone <URL_DEL_REPOSITORIO>
+cd adecine-sistema
+code .
+```
+
+### Paso 2: Instalar Dependencias del Frontend
+
+Abre una terminal en VS Code (`Ctrl + ñ` o `Terminal > New Terminal`) y ejecuta:
+
+```bash
+# Navegar a la carpeta frontend
+cd frontend
+
+# Instalar dependencias con npm
+npm install
+
+# O si prefieres yarn
+npm install -g yarn
+yarn install
+```
+
+**Tiempo estimado:** 2-3 minutos
+
+### Paso 3: Instalar Dependencias del Backend
+
+En otra terminal (o la misma), ejecuta:
+
+```bash
+# Navegar a la carpeta backend (desde la raíz del proyecto)
+cd backend
+
+# Crear entorno virtual de Python
+python -m venv venv
+
+# Activar entorno virtual
+# En Windows:
+venv\Scripts\activate
+
+# En Mac/Linux:
+source venv/bin/activate
+
+# Instalar dependencias
+pip install -r requirements.txt
+```
+
+**Tiempo estimado:** 3-5 minutos
+
+---
+
+## ⚙️ Configuración de Variables de Entorno
+
+### Frontend (.env)
+
+El archivo ya existe en `/frontend/.env`:
+
+```env
+REACT_APP_BACKEND_URL=http://localhost:8001
+```
+
+**No necesitas modificar nada si vas a ejecutar localmente.**
+
+### Backend (.env)
+
+El archivo ya existe en `/backend/.env`:
+
+```env
+MONGO_URL="mongodb://localhost:27017"
+DB_NAME="test_database"
+DATABASE_URL="postgresql://user:password@localhost:5432/db"
+SECRET_KEY="adecine_secret_key_2025_super_secure"
+CORS_ORIGINS="*"
+```
+
+**Nota:** El backend está configurado pero actualmente usa datos mock en el frontend. Para desarrollo local, esto es suficiente.
+
+---
+
+## ▶️ Ejecutar el Proyecto
+
+### Paso 1: Iniciar el Backend
+
+En una terminal (asegúrate de estar en `/backend` y tener el entorno virtual activado):
+
+```bash
+# Si no está activado el entorno virtual:
+# Windows: venv\Scripts\activate
+# Mac/Linux: source venv/bin/activate
+
+# Iniciar servidor FastAPI
+python -m uvicorn server:app --reload --host 0.0.0.0 --port 8001
+```
+
+Deberías ver:
+```
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     Started reloader process
+INFO:     Started server process
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+```
+
+**✅ Backend corriendo en:** `http://localhost:8001`
+
+### Paso 2: Iniciar el Frontend
+
+En **otra terminal nueva**, navega a la carpeta frontend:
+
+```bash
+cd frontend
+
+# Iniciar servidor de desarrollo
+npm start
+
+# O con yarn
+yarn start
+```
+
+Se abrirá automáticamente tu navegador en `http://localhost:3000`
+
+**✅ Frontend corriendo en:** `http://localhost:3000`
+
+---
+
+## 🔐 Credenciales de Acceso
+
+### Usuarios de Prueba
+
+| Rol | Usuario | Contraseña | Descripción |
+|-----|---------|------------|-------------|
+| **Administrador** | `admin` | `admin123` | Acceso total al sistema |
+| **Jefe de Activos** | `jefe_activos` | `jefe123` | Gestión de bienes y aprobación de solicitudes |
+| **Funcionario** | `cmamani` | `carlos123` | Vista personal limitada |
+| **Funcionario** | `acondori` | `ana123` | Vista personal limitada |
+| **Funcionario** | `lfernandez` | `lucia123` | Vista personal limitada |
+
+---
+
+## 📁 Estructura del Proyecto
+
+```
+adecine-sistema/
+├── frontend/                 # Aplicación React
+│   ├── public/
+│   ├── src/
+│   │   ├── components/       # Componentes reutilizables
+│   │   │   ├── ui/          # Componentes shadcn/ui
+│   │   │   └── layout/      # Layout y navegación
+│   │   ├── contexts/        # Context API (Auth, Theme)
+│   │   ├── pages/           # Páginas de la aplicación
+│   │   ├── mock/            # Datos mock (temporal)
+│   │   ├── hooks/           # Custom hooks
+│   │   ├── App.js           # Componente principal
+│   │   └── index.js         # Punto de entrada
+│   ├── package.json
+│   └── .env
+│
+├── backend/                  # API FastAPI
+│   ├── server.py            # Servidor principal
+│   ├── models.py            # Modelos de base de datos
+│   ├── schemas.py           # Esquemas Pydantic
+│   ├── auth.py              # Autenticación JWT
+│   ├── database.py          # Configuración de DB
+│   ├── seed_data.py         # Datos iniciales
+│   ├── requirements.txt     # Dependencias Python
+│   └── .env
+│
+├── contracts.md             # Documentación de API
+└── README.md               # Este archivo
+```
+
+---
+
+## 🎨 Características Principales
+
+### Para Administradores y Jefe de Activos
+- ✅ Dashboard con estadísticas generales
+- ✅ Gestión completa de bienes (CRUD)
+- ✅ Gestión de personal con códigos QR
+- ✅ Aprobar/rechazar solicitudes
+- ✅ Control de mantenimientos
+- ✅ Generación de reportes
+- ✅ Vista de todos los usuarios con contraseñas hasheadas
+
+### Para Funcionarios
+- ✅ Dashboard personalizado con diseño ADECINE
+- ✅ Ver solo sus bienes asignados
+- ✅ Ver solo sus solicitudes
+- ✅ Crear nuevas solicitudes
+- ✅ Acceso restringido (no pueden ver módulos administrativos)
+
+---
+
+## 🛠️ Comandos Útiles
+
+### Frontend
+
+```bash
+# Iniciar en modo desarrollo
+npm start
+
+# Crear build de producción
+npm run build
+
+# Ejecutar tests
+npm test
+```
+
+### Backend
+
+```bash
+# Iniciar servidor
+python -m uvicorn server:app --reload --port 8001
+
+# Crear datos de prueba (cuando se configure la DB)
+python seed_data.py
+
+# Ver documentación interactiva de la API
+# Una vez iniciado el backend, visita:
+# http://localhost:8001/docs
+```
+
+---
+
+## 🐛 Solución de Problemas
+
+### Error: "node no se reconoce como comando"
+**Solución:** Reinstala Node.js y asegúrate de marcarlo en PATH durante la instalación.
+
+### Error: "python no se reconoce como comando"
+**Solución:** Reinstala Python y marca "Add Python to PATH" durante la instalación.
+
+### Error: "Puerto 3000 ya está en uso"
+**Solución:** 
+```bash
+# Windows
+netstat -ano | findstr :3000
+taskkill /PID <PID> /F
+
+# Mac/Linux
+lsof -i :3000
+kill -9 <PID>
+```
+
+### Error: "Cannot find module"
+**Solución:**
+```bash
+# Frontend
+cd frontend
+rm -rf node_modules package-lock.json
+npm install
+
+# Backend
+cd backend
+pip install --upgrade -r requirements.txt
+```
+
+### Frontend no se conecta al Backend
+**Solución:**
+1. Verifica que el backend esté corriendo en el puerto 8001
+2. Verifica el archivo `frontend/.env`:
+   ```env
+   REACT_APP_BACKEND_URL=http://localhost:8001
+   ```
+3. Reinicia el frontend después de cambiar .env
+
+---
+
+## 📚 Tecnologías Utilizadas
+
+### Frontend
+- **React 19** - Framework UI
+- **React Router** - Navegación
+- **Tailwind CSS** - Estilos
+- **shadcn/ui** - Componentes UI
+- **Axios** - Peticiones HTTP
+- **Lucide React** - Iconos
+
+### Backend
+- **FastAPI** - Framework web
+- **SQLAlchemy** - ORM
+- **PostgreSQL** - Base de datos (configurado)
+- **JWT** - Autenticación
+- **Bcrypt** - Hash de contraseñas
+- **QRCode** - Generación de códigos QR
+- **ReportLab** - Generación de PDFs
+
+---
+
+## 📝 Próximos Pasos
+
+1. **Configurar PostgreSQL** (Opcional - actualmente usa mock data)
+2. **Conectar Frontend con Backend real**
+3. **Implementar integración con hardware de huella digital**
+4. **Configurar reportes PDF/Excel**
+5. **Deploy a producción**
+
+---
+
+## 📞 Soporte
+
+Para consultas sobre el sistema:
+- **Email**: activos@adecine.gob.bo
+- **Interno**: 201
+
+---
+
+## 📄 Licencia
+
+Sistema desarrollado para ADECINE - Autoridad de Fiscalización y Control de Cinematografía y Eventos Públicos, Bolivia.
+
+© 2025 ADECINE - Todos los derechos reservados.
+
+---
+
+## 🎓 Trabajo de Grado
+
+**Título:** "Gestión de Bienes Institucionales y Personal con Identificación Digital"
+
+**Institución:** Autoridad de Fiscalización y Control de Cinematografía y Eventos Públicos (ADECINE)
+
+**País:** Bolivia
+
+**Año:** 2025
